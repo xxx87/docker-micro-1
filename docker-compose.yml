@@ -1,0 +1,25 @@
+version: "3"
+
+networks:
+  my_network_m1:
+    driver: bridge
+
+services:
+  my_service_1:
+    image: "micro-1"
+    build: .
+    container_name: my_service_1
+    ports:
+      - "3001:3001"
+    networks:
+      - my_network_m1
+    environment:
+      - MONGO_URL=mongodb://my_db:27017/api-db-micro1
+    restart: on-failure
+    depends_on:
+      - my_db
+  my_db:
+    image: "mongo"
+    container_name: my_db_1
+    networks:
+      - my_network_m1
